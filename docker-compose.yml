@@ -1,9 +1,8 @@
-ark:
-  container_name: ark
-  image: turzam/ark
+atlas:
+  container_name: atlas
+  image: gabethecabbage/atlas
   environment:
-    - SESSIONNAME=Ark Docker
-    - SERVERMAP=TheIsland
+    - SERVERMAP=Ocean
     - SERVERPASSWORD="" 
     - ADMINPASSWORD=adminpassword
     - BACKUPONSTART=1
@@ -12,10 +11,10 @@ ark:
     - GID=1000
     - UID=1000
   volumes:
-    - /my/path/to/ark:/ark
+    - /my/path/to/atlas:/atlas
   ports:
-   - 7778:7778/udp
-   - 7778:7778
-   - 27015:27015/udp
-   - 27015:27015
+   - 5750:5750/udp
+   - 5750:5750
+   - 57550:57550/udp
+   - 57550:57550
    - 32330:32330

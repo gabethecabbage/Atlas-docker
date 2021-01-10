@@ -1,12 +1,9 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
-MAINTAINER TuRzAm
 
 # Var for first config
-# Server Name
-ENV SESSIONNAME "Ark Docker"
 # Map name
-ENV SERVERMAP "TheIsland"
+ENV SERVERMAP "Ocean"
 # Server password
 ENV SERVERPASSWORD ""
 # Admin password
@@ -17,12 +14,13 @@ ENV NBPLAYERS 70
 ENV UPDATEONSTART 1
 # if the server is backup when start with docker start
 ENV BACKUPONSTART 1
-#  Tag on github for ark server tools
-ENV GIT_TAG v1.5
+#  Tag on github for atlas server tools
+ENV GIT_TAG v1.8.5.5
+#ENV GIT_TAG master
 # Server PORT (you can't remap with docker, it doesn't work)
-ENV SERVERPORT 27015
+ENV SERVERPORT 57550
 # Steam port (you can't remap with docker, it doesn't work)
-ENV STEAMPORT 7778
+ENV STEAMPORT 5750
 # if the server should backup after stopping
 ENV BACKUPONSTOP 0
 # If the server warn the players before stopping
@@ -34,7 +32,7 @@ ENV GID 1000
 
 # Install dependencies 
 RUN apt-get update &&\ 
-    apt-get install -y curl lib32gcc1 lsof git
+    apt-get install -y curl lib32gcc1 lsof git sudo
 
 # Enable passwordless sudo for users under the "sudo" group
 RUN sed -i.bkp -e \
@@ -54,33 +52,33 @@ RUN usermod -a -G sudo steam
 COPY run.sh /home/steam/run.sh
 COPY user.sh /home/steam/user.sh
 COPY crontab /home/steam/crontab
-COPY arkmanager-user.cfg /home/steam/arkmanager.cfg
+COPY atlasmanager-user.cfg /home/steam/atlasmanager.cfg
 
 RUN touch /root/.bash_profile
 RUN chmod 777 /home/steam/run.sh
 RUN chmod 777 /home/steam/user.sh
-RUN mkdir  /ark
+RUN mkdir  /atlas
 
 
 # We use the git method, because api github has a limit ;)
-RUN  git clone https://github.com/FezVrasta/ark-server-tools.git /home/steam/ark-server-tools
-WORKDIR /home/steam/ark-server-tools/
+RUN  git clone https://github.com/BoiseComputer/atlas-server-tools.git /home/steam/atlas-server-tools
+WORKDIR /home/steam/atlas-server-tools/
 RUN  git checkout $GIT_TAG 
 # Install 
-WORKDIR /home/steam/ark-server-tools/tools
+WORKDIR /home/steam/atlas-server-tools/tools
 RUN chmod +x install.sh 
 RUN ./install.sh steam 
 
-# Allow crontab to call arkmanager
-RUN ln -s /usr/local/bin/arkmanager /usr/bin/arkmanager
+# Allow crontab to call atlasmanager
+RUN ln -s /usr/local/bin/atlasmanager /usr/bin/atlasmanager
 
-# Define default config file in /etc/arkmanager
-COPY arkmanager-system.cfg /etc/arkmanager/arkmanager.cfg
+# Define default config file in /etc/atlasmanager
+COPY atlasmanager-system.cfg /etc/atlasmanager/atlasmanager.cfg
 
-# Define default config file in /etc/arkmanager
-COPY instance.cfg /etc/arkmanager/instances/main.cfg
+# Define default config file in /etc/atlasmanager
+COPY instance.cfg /etc/atlasmanager/instances/main.cfg
 
-RUN chown steam -R /ark && chmod 755 -R /ark
+RUN chown steam -R /atlas && chmod 755 -R /atlas
 
 #USER steam 
 
@@ -98,10 +96,10 @@ EXPOSE ${STEAMPORT} 32330 ${SERVERPORT}
 # Add UDP
 EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp
 
-VOLUME  /ark 
+VOLUME  /atlas 
 
 # Change the working directory to /arkd
-WORKDIR /ark
+WORKDIR /atlas
 
 # Update game launch the game.
 ENTRYPOINT ["/home/steam/user.sh"]
