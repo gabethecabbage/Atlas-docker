@@ -31,8 +31,14 @@ ENV UID 1000
 ENV GID 1000
 
 # Install dependencies 
-RUN apt-get update &&\ 
-    apt-get install -y curl lib32gcc1 lsof git sudo
+RUN apt-get update &&\
+    apt-get install -y perl-modules libprotobuf10 libidn11 libc6-i386 lib32gcc1 lsof bzip2 redis jq git sudo
+
+# Install libcurl3/4 ppa and packages
+RUN apt-get install -y software-properties-common &&\
+    add-apt-repository ppa:xapienz/curl34 &&\
+    apt-get update &&\
+    apt-get install -y curl
 
 # Enable passwordless sudo for users under the "sudo" group
 RUN sed -i.bkp -e \
