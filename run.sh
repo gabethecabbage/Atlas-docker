@@ -71,7 +71,7 @@ else
 	echo "No crontab set."
 fi
 
-# Launching ark server
+# Launching atlas server
 if [ $UPDATEONSTART -eq 0 ]; then
 	atlasmanager start --noautoupdate
 else

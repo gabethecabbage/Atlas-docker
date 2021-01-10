@@ -12,7 +12,7 @@ if [ ! "$(id -g steam)" -eq "$GID" ]; then
 fi
 
 # Put steam owner of directories (if the uid changed, then it's needed)
-chown -R steam:steam /ark /home/steam
+chown -R steam:steam /atlas /home/steam
 
 # avoid error message when su -p (we need to read the /root/.bash_rc )
 chmod -R 777 /root/

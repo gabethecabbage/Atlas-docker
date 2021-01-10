@@ -98,7 +98,7 @@ EXPOSE ${STEAMPORT}/udp ${SERVERPORT}/udp
 
 VOLUME  /atlas 
 
-# Change the working directory to /arkd
+# Change the working directory to /atlas
 WORKDIR /atlas
 
 # Update game launch the game.
